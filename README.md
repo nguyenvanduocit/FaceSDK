@@ -1,6 +1,6 @@
 # FaceSDK
 
-This SDK wrap some method for faceplusplus.com's API. Provides modern ways to use the API in PHP.
+This SDK is the wrapper for faceplusplus.com's API. Provides modern ways to use the API in PHP.
 
 # Install
 
