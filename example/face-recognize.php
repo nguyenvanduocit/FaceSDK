@@ -17,7 +17,7 @@ $response  = $faceAPI->post( '/detection/detect', [
 ] );
 
 /** @var RecognizedImage $detectedImage */
-$detectedImage = $response->getGraphDetectedImage();
+$detectedImage = $response->getRecognizedImage();
 var_dump('$detectedImage', $detectedImage);
 
 /** @var \FaceSDK\Node\RecognizedFace[] $faces */

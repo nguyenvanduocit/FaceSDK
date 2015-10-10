@@ -13,7 +13,7 @@ class RecognizedFaceAttribute extends Node {
 	/**
 	 * @var array Maps object key names to Graph object types.
 	 */
-	protected static $graphObjectMap = [
+	protected static $objectMap = [
 		'pose'    => '\FaceSDK\Node\Type\Pose',
 		'age'     => '\FaceSDK\Node\Type\Range',
 		'gender'  => '\FaceSDK\Node\Type\Confidence',

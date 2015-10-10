@@ -21,7 +21,7 @@ class FaceResponse {
 	protected $headers;
 	/** @var  string */
 	protected $body;
-	/** @var  array */
+	/** @var  \stdClass */
 	protected $decodedBody;
 	/** @var  FaceRequest */
 	protected $request;
@@ -80,7 +80,7 @@ class FaceResponse {
 	{
 		$factory = new NodeFactory($this);
 
-		return $factory->makeGraphNode($subclassName);
+		return $factory->makeNode($subclassName);
 	}
 	/**
 	 * Instantiate a new GraphEdge from response.
@@ -94,24 +94,24 @@ class FaceResponse {
 	 */
 	public function getEdge($subclassName = null, $auto_prefix = true)
 	{
-		$factory = new GraphNodeFactory($this);
+		$factory = new NodeFactory($this);
 
-		return $factory->makeGraphEdge($subclassName, $auto_prefix);
+		return $factory->makeEdge($subclassName, $auto_prefix);
 	}
 	/**
 	 * @return Node\DetectedImage
 	 * @throws FaceAPIException
 	 */
-	public function getGraphDetectedImage()
+	public function getRecognizedImage()
 	{
 		$factory = new NodeFactory($this);
 
-		return $factory->makeGraphDetectedImage();
+		return $factory->makeRecognizedImage();
 	}
 
-	public function getGraphGroupPersonList(){
+	public function getGroupPersonList(){
 		$factory = new NodeFactory($this);
-		return $factory->makeGraphGroupPersonList();
+		return $factory->makeGroupPersonList();
 	}
 	/**
 	 * Returns true if server returned an error message.

@@ -14,7 +14,7 @@ class Node extends Collection
     /**
      * @var array Maps object key names to Graph object types.
      */
-    protected static $graphObjectMap = [];
+    protected static $objectMap = [];
 
     /**
      * Init this Graph object.
@@ -158,12 +158,12 @@ class Node extends Collection
     }
 
     /**
-     * Getter for $graphObjectMap.
+     * Getter for $objectMap.
      *
      * @return array
      */
     public static function getObjectMap()
     {
-        return static::$graphObjectMap;
+        return static::$objectMap;
     }
 }

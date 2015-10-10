@@ -16,15 +16,15 @@ class NodeFactory {
 	/**
 	 * @const string The base graph object class.
 	 */
-	const BASE_GRAPH_NODE_CLASS = '\FaceSDK\Node\Node';
+	const BASE_NODE_CLASS = '\FaceSDK\Node\Node';
 	/**
 	 * @const string The base graph edge class.
 	 */
-	const BASE_GRAPH_EDGE_CLASS = '\FaceSDK\Node\Edge';
+	const BASE_EDGE_CLASS = '\FaceSDK\Node\Edge';
 	/**
 	 * @const string The graph object prefix.
 	 */
-	const BASE_GRAPH_OBJECT_PREFIX = '\FaceSDK\Node\\';
+	const BASE_OBJECT_PREFIX = '\FaceSDK\Node\\';
 
 	/**
 	 * @var FaceResponse The response entity from Graph.
@@ -52,7 +52,7 @@ class NodeFactory {
 	 * @return null
 	 * @throws FaceAPIException
 	 */
-	public function makeGraphNode( $subclassName = null) {
+	public function makeNode( $subclassName = null) {
 		$this->validateResponseAsArray();
 		$this->validateResponseCastableAsGraphNode();
 		return $this->castAsGraphNodeOrGraphEdge($this->decodedBody, $subclassName);
@@ -64,13 +64,13 @@ class NodeFactory {
 	 *
 	 * @throws FaceAPIException
 	 */
-	public function makeGraphDetectedImage()
+	public function makeRecognizedImage()
 	{
-		return $this->makeGraphNode(static::BASE_GRAPH_OBJECT_PREFIX.'RecognizedImage');
+		return $this->makeNode(static::BASE_OBJECT_PREFIX.'RecognizedImage');
 	}
 
-	public function makeGraphGroupPersonList(){
-		return $this->makeGraphEdge('Person');
+	public function makeGroupPersonList(){
+		return $this->makeEdge('Person');
 	}
 	/**
 	 * @throws FaceAPIException
@@ -88,7 +88,7 @@ class NodeFactory {
 		 */
 		if ($this->isCastableAsGraphEdge($this->decodedBody)) {
 			throw new FaceAPIException(
-				'Unable to convert response from Graph to a GraphNode because the response looks like a GraphEdge. Try using NodeFactory::makeGraphEdge() instead.',
+				'Unable to convert response from Graph to a GraphNode because the response looks like a GraphEdge. Try using NodeFactory::makeEdge() instead.',
 				620
 			);
 		}
@@ -155,7 +155,7 @@ class NodeFactory {
 			$dataList[] = $this->safelyMakeGraphNode($graphNode, $subclassName);
 		}
 		// We'll need to make an edge endpoint for this in case it's a GraphEdge (for cursor pagination)
-		$className = static::BASE_GRAPH_EDGE_CLASS;
+		$className = static::BASE_EDGE_CLASS;
 
 		return new $className($this->response->getRequest(), $dataList, $subclassName);
 	}
@@ -169,13 +169,13 @@ class NodeFactory {
 	 *
 	 * @throws FaceAPIException
 	 */
-	public function makeGraphEdge($subclassName = null, $auto_prefix = true)
+	public function makeEdge($subclassName = null, $auto_prefix = true)
 	{
 		$this->validateResponseAsArray();
 		$this->validateResponseCastableAsGraphEdge();
 
 		if ($subclassName && $auto_prefix) {
-			$subclassName = static::BASE_GRAPH_OBJECT_PREFIX . $subclassName;
+			$subclassName = static::BASE_OBJECT_PREFIX . $subclassName;
 		}
 
 		return $this->castAsGraphNodeOrGraphEdge($this->decodedBody, $subclassName);
@@ -191,18 +191,18 @@ class NodeFactory {
 	 * @throws FaceAPIException
 	 */
 	public function safelyMakeGraphNode($data, $subclassName = null){
-		$subclassName = $subclassName ?: static::BASE_GRAPH_NODE_CLASS;
+		$subclassName = $subclassName ?: static::BASE_NODE_CLASS;
 		static::validateSubclass($subclassName);
 		$items = [];
 		foreach ($data as $k => $v) {
 			// Array means could be recurable
 			if (is_array($v) || is_object($v)) {
-				// Detect any smart-casting from the $graphObjectMap array.
+				// Detect any smart-casting from the $objectMap array.
 				// This is always empty on the GraphNode collection, but subclasses can define
 				// their own array of smart-casting types.
-				$graphObjectMap = $subclassName::getObjectMap();
-				$objectSubClass = isset($graphObjectMap[$k]) ? $graphObjectMap[$k] : null;
-				// Could be a GraphEdge or GraphNode
+				$objectMap = $subclassName::getObjectMap();
+				$objectSubClass = isset($objectMap[$k]) ? $objectMap[$k] : null;
+				// Could be a Edge or Node
 				$items[$k] = $this->castAsGraphNodeOrGraphEdge($v, $objectSubClass);
 			} else {
 				$items[$k] = $v;
@@ -221,7 +221,7 @@ class NodeFactory {
 	 */
 	public static function validateSubclass($subclassName)
 	{
-		if ($subclassName == static::BASE_GRAPH_NODE_CLASS || is_subclass_of($subclassName, static::BASE_GRAPH_NODE_CLASS)) {
+		if ($subclassName == static::BASE_NODE_CLASS || is_subclass_of($subclassName, static::BASE_NODE_CLASS)) {
 			return;
 		}
 
@@ -231,7 +231,7 @@ class NodeFactory {
 	private function validateResponseCastableAsGraphEdge() {
 		if (!static::isCastableAsGraphEdge($this->decodedBody)) {
 			throw new FaceAPIException(
-				'Unable to convert response from Graph to a GraphEdge because the response does not look like a GraphEdge. Try using GraphNodeFactory::makeGraphNode() instead.',
+				'Unable to convert response from Graph to a GraphEdge because the response does not look like a GraphEdge. Try using GraphNodeFactory::makeNode() instead.',
 				620
 			);
 		}
