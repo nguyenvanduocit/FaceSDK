@@ -55,6 +55,11 @@ $center = $position->getCenter();
 var_dump('$center', $center);
 ```
 
+# TODO
+
+- Implement all API from [FacePlusPlus Doc](http://www.faceplusplus.com/api-overview/)
+- Improve Exception
+
 # Contribute
 
 Feel free to make PR
