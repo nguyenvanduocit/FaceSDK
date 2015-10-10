@@ -10,7 +10,7 @@ use FaceSDK\Node\RecognizedImage;
 require_once '../vendor/autoload.php';
 
 $faceAPI = new \FaceSDK\FaceSDK( 'API', 'SECRET', 'http://apicn.faceplusplus.com' );
-$filePath = __DIR__.'/Ngoc_Trinh_22.png';
+$filePath = 'img/Son_Tung_1.jpg';
 $response = $faceAPI->post( '/detection/detect', [
 	'img'       => $faceAPI->fileToUpload($filePath),
 	'attribute' => 'glass,gender,age,race,smiling,glass,pose'
@@ -30,21 +30,46 @@ $faces = $image->getFaces();
  */
 if(count($faces) > 0){
 	$mainPosition = $faces[0]->getPosition();
-	$top = $mainPosition->getEyeLeft()->getY()*$height/100;
-	$left = $mainPosition->getEyeLeft()->getX()*$width/100;
-	$bottom = $mainPosition->getMoutLeft()->getY()*$height/100;
-	$right = $mainPosition->getEyeRight()->getX()*$width/100;
-	$age = $faces[0]->getAttributes()->getAge()->getValue();
-	$padding = 50;
+	$padding = 90;
+	$top = $mainPosition->getEyeLeft()->getY() * $height / 100 - $padding;
+	$left = $mainPosition->getEyeLeft()->getX() * $width / 100 - $padding;
+	$bottom = $mainPosition->getMoutLeft()->getY() * $height / 100 + $padding;
+	$right = $mainPosition->getEyeRight()->getX() * $width / 100 + $padding;
+
+	$attrs = $faces[0]->getAttributes();
+	$age = $attrs->getAge()->getValue();
+	$gender = $attrs->getGender()->getValue();
+	$isSmiling = $attrs->getSmiling()->getValue()>30;
 	$font = 'arial.ttf';
 	// Load image
-	$im = imagecreatefrompng($filePath );
+	$im = imagecreatefromjpeg($filePath );
 	// Make color
 	$green = imagecolorallocate($im, 230, 33, 23);
+	// Write addition information
+	$additionalText = '';
+	if($gender =='Female'){
+		$additionalText .= 'She';
+	}
+	else{
+		$additionalText .= 'He';
+	}
+	if($isSmiling){
+		$additionalText .= ' is smiling';
+	}
+	else{
+		$additionalText .= ' is not smiling';
+	}
 	// Write text
-	imagettftext($im, 20, 0, ($left + $right)/2-10, $bottom+$padding+20, $green, $font, $age);
+	$bbox = imagettfbbox(20, 0, $font, $age.' year old');
+	list($lower_left_x,$lower_left_Y, $lower_right_x, $lower_right_y, $upper_right_x, $upper_left_x, $upper_left_y ) =$bbox;
+	imagettftext($im, 20, 0, ($left + $right)/2 - ($upper_right_x-$upper_left_x)/2, $bottom+abs( $upper_left_y - $lower_left_Y )+20, $green, $font, $age.' year old');
+
+	$bbox = imagettfbbox(20, 0, $font, $additionalText);
+	list($lower_left_x,$lower_left_Y, $lower_right_x, $lower_right_y, $upper_right_x, $upper_left_x, $upper_left_y ) =$bbox;
+	imagettftext($im, 20, 0, ($left + $right)/2 - ($upper_right_x-$upper_left_x)/2, $bottom+abs( $upper_left_y - $lower_left_Y )+50, $green, $font, $additionalText);
 	// Draw rectangle
-	imagerectangle($im, ($left-$padding), ($top-$padding), ($right+$padding), ($bottom+$padding), $green);
+	imagesetthickness ( $im , 2 );
+	imagerectangle($im, $left, $top, $right, $bottom, $green);
 	//Write
 	// Output and free from memory
 	header('Content-Type: image/jpeg');
