@@ -30,4 +30,35 @@ class FacePosition extends Node {
 	public function getCenter() {
 		return $this->getField( 'center' );
 	}
+	/**
+	 * @return \FaceSDK\Node\Type\Point
+	 */
+	public function getEyeLeft(){
+		return $this->getField( 'eye_left' );
+	}
+	/**
+	 * @return \FaceSDK\Node\Type\Point
+	 */
+	public function getEyeRight(){
+		return $this->getField( 'eye_right' );
+	}
+	/**
+	 * @return \FaceSDK\Node\Type\Point
+	 */
+	public function getMoutLeft(){
+		return $this->getField( 'mouth_left' );
+	}
+	/**
+	 * @return \FaceSDK\Node\Type\Point
+	 */
+	public function getMoutRight(){
+		return $this->getField( 'mouth_right' );
+	}
+	/**
+	 * @return \FaceSDK\Node\Type\Point
+	 */
+	public function getNose(){
+		return $this->getField( 'nose' );
+	}
+
 }

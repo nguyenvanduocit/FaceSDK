@@ -11,6 +11,7 @@ namespace FaceSDK\Tests;
 
 use FaceSDK\FaceRequest;
 use FaceSDK\FaceResponse;
+use FaceSDK\FaceSDK;
 use FaceSDK\Node\Type\Range;
 
 class FaceAPITest extends \PHPUnit_Framework_TestCase {
@@ -58,5 +59,16 @@ class FaceAPITest extends \PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf( 'FaceSDK\Node\Edge', $persionList );
 		$this->assertInstanceOf( '\FaceSDK\Node\Person', $persionList[0] );
 		$this->assertEquals( 'Alice', $persionList[0]->getName() );
+	}
+
+	public function testLandmark(){
+		$faceAPI = new FaceSDK( 'API', 'SECRET', 'http://apicn.faceplusplus.com' );
+		$response  = $faceAPI->post( '/detection/landmark', [
+			'face_id'=>'c5c2f4de405227400a268092634b692d'
+		] );
+		$this->assertInstanceOf('\FaceSDK\FaceResponse', $response);
+		/** @var \FaceSDK\Node\Node $node */
+		$node = $response->getNode();
+		var_dump($node->getField('session_id'));
 	}
 }
