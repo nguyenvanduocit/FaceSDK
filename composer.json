@@ -1,5 +1,5 @@
 {
-    "name": "nguyenvanduocit/FaceSDK",
+    "name": "nguyenvanduocit/face-sdk",
     "description": "PHP SDK for face recognition using faceplusplus.com",
     "license": "MIT",
     "type": "library",
