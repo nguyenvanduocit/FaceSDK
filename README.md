@@ -16,10 +16,8 @@ This API is free to use, you can register your application at [FacePlusPlus](htt
 # Usage
 
 ```php
-use FaceSDK\Node\RecognizedImage;
-
 require_once '../vendor/autoload.php';
-
+use FaceSDK\Node\RecognizedImage;
 $faceAPI = new \FaceSDK\FaceSDK( 'YOUR_API', 'YOUR_API', 'http://apicn.faceplusplus.com' );
 $response  = $faceAPI->post( '/detection/detect', [
 	'url' => 'http://2anhdep.vn/wp-content/uploads/2014/11/anh-ngoc-trinh-dep-trong-nhung-bo-noi-y-xuyen-thau-khien-nguoi-xem-do-mat-6.jpg',
