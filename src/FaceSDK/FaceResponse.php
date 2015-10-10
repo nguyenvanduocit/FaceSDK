@@ -83,9 +83,9 @@ class FaceResponse {
 		return $factory->makeNode($subclassName);
 	}
 	/**
-	 * Instantiate a new GraphEdge from response.
+	 * Instantiate a new Edge from response.
 	 *
-	 * @param string|null $subclassName The GraphNode subclass to cast list items to.
+	 * @param string|null $subclassName The Node subclass to cast list items to.
 	 * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
 	 *
 	 * @return Edge

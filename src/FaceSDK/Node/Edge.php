@@ -4,7 +4,7 @@ namespace FaceSDK\Node;
 use FaceSDK\FaceRequest;
 
 /**
- * Class GraphEdge
+ * Class Edge
  *
  * @package Facebook
  */
@@ -22,11 +22,11 @@ class Edge extends Collection
 
 
     /**
-     * Init this collection of GraphNode's.
+     * Init this collection of Node's.
      *
      * @param FaceRequest $request      The original request that generated this data.
-     * @param array       $data         An array of GraphNode's.
-     * @param string|null $subclassName The subclass of the child GraphNode's.
+     * @param array       $data         An array of Node's.
+     * @param string|null $subclassName The subclass of the child Node's.
      *
      * @internal param null|string $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
      */
@@ -39,7 +39,7 @@ class Edge extends Collection
     }
 
     /**
-     * Gets the subclass name that the child GraphNode's are cast as.
+     * Gets the subclass name that the child Node's are cast as.
      *
      * @return string|null
      */

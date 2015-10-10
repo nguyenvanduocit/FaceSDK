@@ -133,16 +133,4 @@ class UrlManipulator
 
         return strpos($string, '/') === 0 ? $string : '/' . $string;
     }
-
-    /**
-     * Trims off the hostname and Graph version from a URL.
-     *
-     * @param string $urlToTrim The URL the needs the surgery.
-     *
-     * @return string The $urlToTrim with the hostname and Graph version removed.
-     */
-    public static function baseGraphUrlEndpoint($urlToTrim)
-    {
-        return '/' . preg_replace('/^https:\/\/.+\.facebook\.com(\/v.+?)?\//', '', $urlToTrim);
-    }
 }

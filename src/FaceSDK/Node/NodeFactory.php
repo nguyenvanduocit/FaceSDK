@@ -54,8 +54,8 @@ class NodeFactory {
 	 */
 	public function makeNode( $subclassName = null) {
 		$this->validateResponseAsArray();
-		$this->validateResponseCastableAsGraphNode();
-		return $this->castAsGraphNodeOrGraphEdge($this->decodedBody, $subclassName);
+		$this->validateResponseCastableAsNode();
+		return $this->castAsNodeOrEdge($this->decodedBody, $subclassName);
 	}
 	/**
 	 * Convenience method for creating a GraphAlbum collection.
@@ -82,25 +82,25 @@ class NodeFactory {
 
 	}
 
-	private function validateResponseCastableAsGraphNode() {
+	private function validateResponseCastableAsNode() {
 		/**
 		 * Reponse can cast to node only if it contain more than 1 properties or 1 property and not is array
 		 */
-		if ($this->isCastableAsGraphEdge($this->decodedBody)) {
+		if ($this->isCastableAsEdge($this->decodedBody)) {
 			throw new FaceAPIException(
-				'Unable to convert response from Graph to a GraphNode because the response looks like a GraphEdge. Try using NodeFactory::makeEdge() instead.',
+				'Unable to convert response from Graph to a Node because the response looks like a Edge. Try using NodeFactory::makeEdge() instead.',
 				620
 			);
 		}
 	}
 
 	/**
-	 * Determines whether or not the data should be cast as a GraphEdge.
+	 * Determines whether or not the data should be cast as a Edge.
 	 * @param $data
 	 *
 	 * @return bool
 	 */
-	private function isCastableAsGraphEdge( &$data ) {
+	private function isCastableAsEdge( &$data ) {
 		if(is_array($data)){
 			// Array can cast to edge
 			return true;
@@ -135,11 +135,11 @@ class NodeFactory {
 	 * @return Node
 	 * @throws FaceAPIException
 	 */
-	private function castAsGraphNodeOrGraphEdge($data, $subclassName = null) {
-		if($this->isCastableAsGraphEdge($data)){
-			return $this->safelyMakeGraphEdge($data, $subclassName);
+	private function castAsNodeOrEdge($data, $subclassName = null) {
+		if($this->isCastableAsEdge($data)){
+			return $this->safelyMakeEdge($data, $subclassName);
 		}
-		return $this->safelyMakeGraphNode($data, $subclassName);
+		return $this->safelyMakeNode($data, $subclassName);
 	}
 
 	/**
@@ -149,20 +149,20 @@ class NodeFactory {
 	 * @return mixed
 	 * @throws FaceAPIException
 	 */
-	public function safelyMakeGraphEdge(array $data, $subclassName = null){
+	public function safelyMakeEdge(array $data, $subclassName = null){
 		$dataList = [];
-		foreach ($data as $graphNode) {
-			$dataList[] = $this->safelyMakeGraphNode($graphNode, $subclassName);
+		foreach ($data as $node) {
+			$dataList[] = $this->safelyMakeNode($node, $subclassName);
 		}
-		// We'll need to make an edge endpoint for this in case it's a GraphEdge (for cursor pagination)
+		// We'll need to make an edge endpoint for this in case it's a Edge (for cursor pagination)
 		$className = static::BASE_EDGE_CLASS;
 
 		return new $className($this->response->getRequest(), $dataList, $subclassName);
 	}
 	/**
-	 * Tries to convert a FacebookResponse entity into a GraphEdge.
+	 * Tries to convert a FacebookResponse entity into a Edge.
 	 *
-	 * @param string|null $subclassName The GraphNode sub class to cast the list items to.
+	 * @param string|null $subclassName The Node sub class to cast the list items to.
 	 * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
 	 *
 	 * @return Edge
@@ -172,16 +172,16 @@ class NodeFactory {
 	public function makeEdge($subclassName = null, $auto_prefix = true)
 	{
 		$this->validateResponseAsArray();
-		$this->validateResponseCastableAsGraphEdge();
+		$this->validateResponseCastableAsEdge();
 
 		if ($subclassName && $auto_prefix) {
 			$subclassName = static::BASE_OBJECT_PREFIX . $subclassName;
 		}
 
-		return $this->castAsGraphNodeOrGraphEdge($this->decodedBody, $subclassName);
+		return $this->castAsNodeOrEdge($this->decodedBody, $subclassName);
 	}
 	/**
-	 * Safely instantiates a GraphNode of $subclassName.
+	 * Safely instantiates a Node of $subclassName.
 	 *
 	 * @param array       $data         The array of data to iterate over.
 	 * @param string|null $subclassName The subclass to cast this collection to.
@@ -190,7 +190,7 @@ class NodeFactory {
 	 *
 	 * @throws FaceAPIException
 	 */
-	public function safelyMakeGraphNode($data, $subclassName = null){
+	public function safelyMakeNode($data, $subclassName = null){
 		$subclassName = $subclassName ?: static::BASE_NODE_CLASS;
 		static::validateSubclass($subclassName);
 		$items = [];
@@ -198,12 +198,12 @@ class NodeFactory {
 			// Array means could be recurable
 			if (is_array($v) || is_object($v)) {
 				// Detect any smart-casting from the $objectMap array.
-				// This is always empty on the GraphNode collection, but subclasses can define
+				// This is always empty on the Node collection, but subclasses can define
 				// their own array of smart-casting types.
 				$objectMap = $subclassName::getObjectMap();
 				$objectSubClass = isset($objectMap[$k]) ? $objectMap[$k] : null;
 				// Could be a Edge or Node
-				$items[$k] = $this->castAsGraphNodeOrGraphEdge($v, $objectSubClass);
+				$items[$k] = $this->castAsNodeOrEdge($v, $objectSubClass);
 			} else {
 				$items[$k] = $v;
 			}
@@ -215,7 +215,7 @@ class NodeFactory {
 	/**
 	 * Ensures that the subclass in question is valid.
 	 *
-	 * @param string $subclassName The GraphNode subclass to validate.
+	 * @param string $subclassName The Node subclass to validate.
 	 *
 	 * @throws FaceAPIException
 	 */
@@ -225,13 +225,13 @@ class NodeFactory {
 			return;
 		}
 
-		throw new FaceAPIException('The given subclass "' . $subclassName . '" is not valid. Cannot cast to an object that is not a GraphNode subclass.', 620);
+		throw new FaceAPIException('The given subclass "' . $subclassName . '" is not valid. Cannot cast to an object that is not a Node subclass.', 620);
 	}
 
-	private function validateResponseCastableAsGraphEdge() {
-		if (!static::isCastableAsGraphEdge($this->decodedBody)) {
+	private function validateResponseCastableAsEdge() {
+		if (!static::isCastableAsEdge($this->decodedBody)) {
 			throw new FaceAPIException(
-				'Unable to convert response from Graph to a GraphEdge because the response does not look like a GraphEdge. Try using GraphNodeFactory::makeNode() instead.',
+				'Unable to convert response from Graph to a Edge because the response does not look like a Edge. Try using NodeFactory::makeNode() instead.',
 				620
 			);
 		}
