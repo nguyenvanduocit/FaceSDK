@@ -35,23 +35,14 @@ var_dump('$faces', $faces);
 /** @var \FaceSDK\Node\RecognizedFaceAttribute $attrs */
 $attrs =  $faces[0]->getAttributes();
 var_dump('$attrs', $attrs);
-
-/** @var \FaceSDK\Node\Type\Pose $pose */
-$pose = $attrs->getPose();
-var_dump('$pose', $pose);
-
-/** @var \FaceSDK\Node\Type\Range $age */
-$age = $attrs->getAge();
-var_dump('$age', $age);
-
-/** @var \FaceSDK\Node\Type\FacePosition $position */
-$position = $faces[0]->getPosition();
-var_dump('$position', $position);
-
-/** @var \FaceSDK\Node\Type\Point $center */
-$center = $position->getCenter();
-var_dump('$center', $center);
 ```
+
+# Example
+
+There are two example in folder example :
+
+ * face-hightlight.php : Draw a rectangle around main face, and tell if she/he is smiling
+ * face-recognize.php : The demo with the example code below. 
 
 # TODO
 
