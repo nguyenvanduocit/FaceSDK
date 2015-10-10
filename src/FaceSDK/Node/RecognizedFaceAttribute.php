@@ -35,6 +35,12 @@ class RecognizedFaceAttribute extends Node {
 	public function getPose() {
 		return $this->getField( 'pose' );
 	}
+	/**
+	 * @return \FaceSDK\Node\Type\Confidence
+	 */
+	public function getGender(){
+		return $this->getField( 'gender' );
+	}
 
 	/**
 	 * @return \FaceSDK\Node\Type\Confidence
