@@ -15,7 +15,10 @@ class Node extends Collection
      * @var array Maps object key names to Graph object types.
      */
     protected static $objectMap = [];
-
+    /**
+     * @var string Default object type for all
+     */
+    protected static $defaultObject = null;
     /**
      * Init this Graph object.
      *
@@ -165,5 +168,12 @@ class Node extends Collection
     public static function getObjectMap()
     {
         return static::$objectMap;
+    }
+
+    /**
+     * @return string|Null
+     */
+    public static function getDefaultObjectType(){
+        return static::$defaultObject;
     }
 }

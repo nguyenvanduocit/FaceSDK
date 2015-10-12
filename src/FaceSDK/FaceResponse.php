@@ -90,7 +90,7 @@ class FaceResponse {
 	 *
 	 * @return Edge
 	 *
-	 * @throws FacebookSDKException
+	 * @throws FaceAPIException
 	 */
 	public function getEdge($subclassName = null, $auto_prefix = true)
 	{
@@ -99,7 +99,7 @@ class FaceResponse {
 		return $factory->makeEdge($subclassName, $auto_prefix);
 	}
 	/**
-	 * @return Node\DetectedImage
+	 * @return Node\RecognizedImage
 	 * @throws FaceAPIException
 	 */
 	public function getRecognizedImage()
@@ -109,9 +109,16 @@ class FaceResponse {
 		return $factory->makeRecognizedImage();
 	}
 
+	/**
+	 * @return Edge
+	 */
 	public function getGroupPersonList(){
 		$factory = new NodeFactory($this);
 		return $factory->makeGroupPersonList();
+	}
+	public function getDetectedLandmark(){
+		$factory = new NodeFactory($this);
+		return $factory->makeDetectedLandmark();
 	}
 	/**
 	 * Returns true if server returned an error message.

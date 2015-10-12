@@ -75,6 +75,14 @@ class NodeFactory {
 	public function makeGroupPersonList(){
 		return $this->makeEdge('Person');
 	}
+
+	/**
+	 * @return Edge
+	 */
+	public function makeDetectedLandmark()
+	{
+		return $this->makeNode(static::BASE_OBJECT_PREFIX.'DetectedLandmark');
+	}
 	/**
 	 * @throws FaceAPIException
 	 */
@@ -207,8 +215,15 @@ class NodeFactory {
 				// Detect any smart-casting from the $objectMap array.
 				// This is always empty on the Node collection, but subclasses can define
 				// their own array of smart-casting types.
+				/** @var \FaceSDK\Node\Node $subclassName */
 				$objectMap = $subclassName::getObjectMap();
-				$objectSubClass = isset($objectMap[$k]) ? $objectMap[$k] : null;
+				if( isset($objectMap[$k])){
+					$objectSubClass = $objectMap[$k];
+				}
+				else{
+					// May be string or null
+					$objectSubClass =$subclassName::getDefaultObjectType();
+				}
 				// Could be a Edge or Node
 				$items[$k] = $this->castAsNodeOrEdge($v, $objectSubClass);
 			} else {
