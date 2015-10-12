@@ -51,6 +51,11 @@ class FaceResponseException extends FaceAPIException {
 		switch ( $code ) {
 			case 1001:
 				return new static( $response, new FaceInternalException( $message, $code ) );
+			case 1004:
+			case 1005:
+				return new static($response, new FaceArgumentException($message, $code));
+			case 1202:
+				return new static($response, new FaceServerException($message, $code));
 			case 1003:
 				return new static( $response, new FaceAuthorizationException( $message, $code ) );
 		}
