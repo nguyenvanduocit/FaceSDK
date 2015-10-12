@@ -12,6 +12,7 @@ namespace FaceSDK;
 use FaceSDK\Exception\FaceAPIException;
 use FaceSDK\Exception\FaceResponseException;
 use FaceSDK\Node\Edge;
+use FaceSDK\Node\Node;
 use FaceSDK\Node\NodeFactory;
 
 class FaceResponse {
@@ -116,10 +117,20 @@ class FaceResponse {
 		$factory = new NodeFactory($this);
 		return $factory->makeGroupPersonList();
 	}
+
+	/**
+	 * @return Node
+	 */
 	public function getDetectedLandmark(){
 		$factory = new NodeFactory($this);
 		return $factory->makeDetectedLandmark();
 	}
+
+	public function getGroupInfo(){
+		$factory = new NodeFactory($this);
+		return $factory->makeGroupInfo();
+	}
+
 	/**
 	 * Returns true if server returned an error message.
 	 *

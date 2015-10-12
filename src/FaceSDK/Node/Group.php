@@ -19,7 +19,7 @@ class Group extends Node
     ];
 
     /**
-     * @return \FaceSDK\Node\Person
+     * @return \FaceSDK\Node\Person[]
      */
     public function getPersons(){
         return $this->getField('person');

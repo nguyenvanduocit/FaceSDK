@@ -70,6 +70,17 @@ class FaceAPITest extends \PHPUnit_Framework_TestCase {
 		/** @var \FaceSDK\Node\Type\LandMark[] $landmark */
 		$landmark = $detectedLandmark->getLandMarks();
 		$this->assertInstanceOf('\FaceSDK\Node\Edge', $landmark);
-		var_dump($landmark[0]->getFaceId());
 	}
+
+	public function testGroup(){
+		$request     = new FaceRequest( 'key', 'secret', 'http://apicn.faceplusplus.com', 'POST', '/foo', [ ] );
+		$body        = '{ "person": [ { "person_id": "98b0fe01f6f212e19a3e659e324e37ab", "tag": "", "person_name": "Alice" }, { "person_id": "9d1598f2831eadfc5817008859865cbd", "tag": "", "person_name": "Bob" } ], "group_id": "f539fa9f6e4689397c76c57f2cfb4edc", "tag": "created_by_Alice", "group_name": "Family" }';
+		$response    = new FaceResponse( $request, $body, 200, [ ] );
+		/** @var \FaceSDK\Node\Group $groupInfo */
+		$groupInfo = $response->getGroupInfo();
+		$this->assertInstanceOf('\FaceSDK\Node\Group', $groupInfo);
+		$personList = $groupInfo->getPersons();
+		$this->assertEquals('Alice', $personList[0]->getName());
+	}
+
 }

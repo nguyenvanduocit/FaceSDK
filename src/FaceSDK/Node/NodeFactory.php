@@ -77,11 +77,18 @@ class NodeFactory {
 	}
 
 	/**
-	 * @return Edge
+	 * @return Node
 	 */
 	public function makeDetectedLandmark()
 	{
 		return $this->makeNode(static::BASE_OBJECT_PREFIX.'DetectedLandmark');
+	}
+
+	/**
+	 * @return Node
+	 */
+	public function makeGroupInfo(){
+		return $this->makeNode(static::BASE_OBJECT_PREFIX.'Group');
 	}
 	/**
 	 * @throws FaceAPIException
