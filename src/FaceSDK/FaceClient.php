@@ -30,7 +30,8 @@ class FaceClient
      * FaceClient constructor.
      *
      * @param string $apiUrl
-     * @param Client $client
+     *
+     * @internal param Client $client
      */
     public function __construct($apiUrl)
     {

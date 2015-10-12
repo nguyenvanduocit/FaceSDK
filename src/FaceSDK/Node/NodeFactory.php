@@ -53,7 +53,7 @@ class NodeFactory {
 	 * @throws FaceAPIException
 	 */
 	public function makeNode( $subclassName = null) {
-		$this->validateResponseAsArray();
+		$this->validateResponseAsObject();
 		$this->validateResponseCastableAsNode();
 		return $this->castAsNodeOrEdge($this->decodedBody, $subclassName);
 	}
@@ -69,19 +69,26 @@ class NodeFactory {
 		return $this->makeNode(static::BASE_OBJECT_PREFIX.'RecognizedImage');
 	}
 
+	/**
+	 * @return Edge
+	 */
 	public function makeGroupPersonList(){
 		return $this->makeEdge('Person');
 	}
 	/**
 	 * @throws FaceAPIException
 	 */
-	public function validateResponseAsArray(){
+	public function validateResponseAsObject(){
 		if (!is_object($this->decodedBody)) {
 			throw new FaceAPIException('Unable to get response from Server as object.', 620);
 		}
 
 	}
 
+	/**
+	 * Validate if object can castable as node of not
+	 * @throws FaceAPIException
+	 */
 	private function validateResponseCastableAsNode() {
 		/**
 		 * Reponse can cast to node only if it contain more than 1 properties or 1 property and not is array
@@ -171,7 +178,7 @@ class NodeFactory {
 	 */
 	public function makeEdge($subclassName = null, $auto_prefix = true)
 	{
-		$this->validateResponseAsArray();
+		$this->validateResponseAsObject();
 		$this->validateResponseCastableAsEdge();
 
 		if ($subclassName && $auto_prefix) {

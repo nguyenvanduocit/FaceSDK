@@ -144,6 +144,14 @@ class FaceSDK {
 
 		return $this->client->sendRequest($request);
 	}
+
+	/**
+	 * @param       $method
+	 * @param       $endpoint
+	 * @param array $params
+	 *
+	 * @return FaceRequest
+	 */
 	public function request($method, $endpoint, array $params = [ ]){
 		return new FaceRequest(
 			$this->getApiKey(),
